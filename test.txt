@@ -5,3 +5,9 @@ first commit
 githubs
 
 temp에서 작성
+
+git branch -r // 원격저장소 브랜치 확인
+git branch -a // 원격저장소, 로컬저장소 브랜치 확인
+
+git push origin --delete dev // 원격저장소의 origin/dev 브랜치 삭제
+git branch -d dev // 로컬저장소의 dev브랜치 삭제
