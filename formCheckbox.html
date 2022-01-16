@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form submit checkbox</title>
+  </head>
+  <body>
+    <form action="">
+      <fieldset>
+        <p>좋아하는 음식은?</p>
+        <div class="form-group">
+          <input type="checkbox" id="favoriteType1" name="food" value="pizza" />
+          <label for="favoriteType1">Pizza</label>
+          <input
+            type="checkbox"
+            id="favoriteType2"
+            name="food"
+            value="nuddle"
+          />
+          <label for="favoriteType2">Nuddle</label>
+          <input
+            type="checkbox"
+            id="favoriteType3"
+            name="food"
+            value="chiken"
+          />
+          <label for="favoriteType3">Chiken</label>
+          <input type="checkbox" id="favoriteType4" name="food" value="meat" />
+          <label for="favoriteType4">Meat</label>
+        </div>
+
+        <p>좋아하는 스포츠는?</p>
+        <div class="form-group">
+          <input
+            type="checkbox"
+            id="sportType1"
+            name="sports"
+            value="baseball"
+          />
+          <label for="sportType1">Baseball</label>
+          <input
+            type="checkbox"
+            id="sportType2"
+            name="sports"
+            value="football"
+          />
+          <label for="sportType2">Football</label>
+          <input type="checkbox" id="sportType3" name="sports" value="ufc" />
+          <label for="sportType3">Ufc</label>
+          <input
+            type="checkbox"
+            id="sportType4"
+            name="sports"
+            value="basketball"
+          />
+          <label for="sportType4">Basketball</label>
+          <input type="checkbox" id="sportType5" name="sports" value="boxing" />
+          <label for="sportType5">Boxing</label>
+        </div>
+
+        <div class="submitButtonContainer" style="margin-top: 1em">
+          <button type="submit">확인</button>
+        </div>
+        <p style="margin-top: 3em">선택된 아이템</p>
+        <div class="currentItem"></div>
+      </fieldset>
+    </form>
+
+    <script>
+      class formCheckboxHandler {
+        constructor(config) {
+          this.form = document.querySelector(config.form);
+          this.curItem = document.querySelector(config.curItem);
+
+          this.eventBind();
+        }
+
+        eventBind() {
+          this.form.addEventListener("submit", this.onSubmit);
+        }
+
+        onSubmit(e) {
+          e.preventDefault();
+
+          const favoriteRecords = Array.from(new FormData(e.target)).filter(
+            record => record[0] === "food"
+          );
+          const sportsRecords = Array.from(new FormData(e.target)).filter(
+            record => record[0] === "sports"
+          );
+
+          if (favoriteRecords.length === 0 || sportsRecords.length === 0) {
+            document.querySelector(".currentItem").innerHTML =
+              "폼요소를 선택해 주세요";
+          }
+        }
+      }
+
+      const formIns = new formCheckboxHandler({
+        form: "form",
+        currentItem: ".currentItem",
+      });
+    </script>
+  </body>
+</html>

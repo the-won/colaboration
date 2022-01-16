@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scroll Event</title>
+    <style>
+      nav {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100px;
+        background-color: #000;
+        transition: all 300ms ease-out;
+      }
+      nav.active {
+        background-color: darkkhaki;
+      }
+      nav ul {
+        display: flex;
+        justify-content: end;
+        gap: 5px;
+        margin-right: 20px;
+      }
+      nav ul li {
+        list-style: none;
+      }
+      .sec {
+        margin: 7em 0;
+        line-height: 2em;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><button type="button">HTML</button></li>
+        <li><button type="button">CSS</button></li>
+        <li><button type="button">JS</button></li>
+        <li><button type="button">VUE</button></li>
+        <li><button type="button">REACT</button></li>
+      </ul>
+    </nav>
+
+    <section class="sec" style="padding-top: 50px">
+      <h3>Have you nice guy?</h3>
+      <div>
+        No reviews for this restaurant has been written yet. Would you like to
+        write the first review for this restaurant in the app? No reviews for
+        this restaurant has been written yet. Would you like to write the first
+        review for this restaurant in the app? No reviews for this restaurant
+        has been written yet. Would you like to write the first review for this
+        restaurant in the app?
+      </div>
+    </section>
+    <section class="sec">
+      <h3>Have you nice guy?</h3>
+      <div>
+        No reviews for this restaurant has been written yet. Would you like to
+        write the first review for this restaurant in the app? No reviews for
+        this restaurant has been written yet. Would you like to write the first
+        review for this restaurant in the app? No reviews for this restaurant
+        has been written yet. Would you like to write the first review for this
+        restaurant in the app?
+      </div>
+    </section>
+    <section class="sec">
+      <h3>Have you nice guy?</h3>
+      <div>
+        No reviews for this restaurant has been written yet. Would you like to
+        write the first review for this restaurant in the app? No reviews for
+        this restaurant has been written yet. Would you like to write the first
+        review for this restaurant in the app? No reviews for this restaurant
+        has been written yet. Would you like to write the first review for this
+        restaurant in the app?
+      </div>
+    </section>
+    <section class="sec">
+      <h3>Have you nice guy?</h3>
+      <div>
+        No reviews for this restaurant has been written yet. Would you like to
+        write the first review for this restaurant in the app? No reviews for
+        this restaurant has been written yet. Would you like to write the first
+        review for this restaurant in the app? No reviews for this restaurant
+        has been written yet. Would you like to write the first review for this
+        restaurant in the app?
+      </div>
+    </section>
+    <section class="sec">
+      <h3>Have you nice guy?</h3>
+      <div>
+        No reviews for this restaurant has been written yet. Would you like to
+        write the first review for this restaurant in the app? No reviews for
+        this restaurant has been written yet. Would you like to write the first
+        review for this restaurant in the app? No reviews for this restaurant
+        has been written yet. Would you like to write the first review for this
+        restaurant in the app?
+      </div>
+    </section>
+    <section class="sec">
+      <h3>Have you nice guy?</h3>
+      <div>
+        No reviews for this restaurant has been written yet. Would you like to
+        write the first review for this restaurant in the app? No reviews for
+        this restaurant has been written yet. Would you like to write the first
+        review for this restaurant in the app? No reviews for this restaurant
+        has been written yet. Would you like to write the first review for this
+        restaurant in the app?
+      </div>
+    </section>
+
+    <script>
+      let currentValue = 0;
+      window.addEventListener("scroll", e => {
+        const scrollTop =
+          window.scrollY ||
+          window.pageYOffset ||
+          document.documentElement.scrollTop ||
+          document.body.scrollTop;
+
+        // scrollTop >= 50
+        //   ? document.querySelector("nav").classList.add("active")
+        //   : document.querySelector("nav").classList.remove("active");
+
+        // down
+        if (scrollTop > currentValue) {
+          document.querySelector("nav").classList.add("active");
+        }
+        // up
+        if (scrollTop < currentValue) {
+          document.querySelector("nav").classList.remove("active");
+        }
+        currentValue = scrollTop;
+      });
+
+      window.addEventListener("wheel", e => {
+        e.deltaY > 0 ? console.log("down") : console.log("up");
+      });
+    </script>
+  </body>
+</html>

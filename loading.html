@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Loading axios Ex</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      .section-one {
+        display: flex;
+      }
+      #loading {
+        display: none;
+        justify-content: center;
+        align-items: center;
+        color: red;
+        font-size: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="section-one">
+      <form action="" class="form-container">
+        <legend>Post</legend>
+        <fieldset>
+          <div class="input-group">
+            <label for="">Title</label>
+            <input type="text" id="" name="title" placeholder="title write" />
+          </div>
+          <div class="input-group">
+            <label for="">Body</label>
+            <input type="text" id="" name="body" placeholder="body write" />
+          </div>
+          <div class="input-group">
+            <label for="">userId</label>
+            <input type="text" id="" name="userId" placeholder="userID write" />
+          </div>
+          <button type="submit">submit</button>
+        </fieldset>
+      </form>
+    </section>
+
+    <div id="loading">loading</div>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      const loadingElm = document.getElementById("loading");
+      const formElm = document.querySelector(".form-container");
+
+      const postApi = axios.create({
+        baseURL: "https://jsonplaceholder.typicode.com/ss",
+        Headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      });
+
+      const fetchPostApi = data => {
+        return postApi({
+          methods: "get",
+          url: "/posts",
+          data: data,
+        });
+      };
+
+      const extPostApi = async (data, callApi, callback) => {
+        try {
+          const res = await callApi(data);
+          callback(true, res.data, "등록이 성공하였습니다.");
+        } catch (error) {
+          callback(false, null, "등록이 실패했습니다.");
+          console.log(error);
+        }
+      };
+
+      postApi.interceptors.request.use(
+        function (config) {
+          loadingElm.style.display = "flex";
+          console.log(config);
+          return config;
+        },
+        function (err) {
+          return Promise(err);
+        }
+      );
+
+      formElm.addEventListener("submit", async e => {
+        e.preventDefault();
+        const formData = new FormData(e.target);
+        const userData = {};
+        for ([key, value] of formData.entries()) {
+          console.log(key, value);
+          userData[key] = value;
+        }
+        console.log(userData);
+        await extPostApi(userData, fetchPostApi, resResult);
+      });
+
+      const resResult = (isSucess, data, message) => {
+        loadingElm.style.display = "none";
+        if (isSucess) {
+          alert(message);
+        } else {
+          alert(message);
+        }
+      };
+    </script>
+  </body>
+</html>

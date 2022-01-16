@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Combo Box</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .current-item {
+        display: block;
+        text-align: center;
+        margin-top: 50px;
+      }
+      .comboBox {
+        position: relative;
+        display: flex;
+        margin: 50px auto 0 auto;
+        width: 150px;
+        height: 30px;
+      }
+      .comboBox input {
+        width: 130px;
+        height: 100%;
+      }
+      .comboBox .arrow {
+        width: 20px;
+        height: 100%;
+        border: 1px solid black;
+        border-left: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+      .comboBox .arrow img {
+        width: 15px;
+        height: 15px;
+      }
+      .comboBox .arrow:hover {
+        background-color: cornsilk;
+      }
+      .comboBox-list {
+        position: absolute;
+        bottom: -100px;
+        display: flex;
+        flex-direction: column;
+        list-style: circle;
+        width: 100%;
+        height: 100px;
+        padding: 0;
+        visibility: hidden;
+        overflow-y: scroll;
+        border: 1px solid black;
+      }
+      .comboBox-list.open {
+        visibility: visible;
+      }
+      .comboBox-list li {
+        cursor: pointer;
+      }
+      .comboBox-list li:hover {
+        background-color: ivory;
+      }
+      .notification {
+        position: absolute;
+        top: 10px;
+        right: -212px;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 15px;
+        font-weight: 600;
+        color: white;
+        background-color: deepskyblue;
+      }
+
+      .notification--show {
+        animation: showSlide 1000ms ease forwards;
+      }
+
+      .notification--hide {
+        animation: hideSlide 1000ms ease forwards;
+      }
+
+      @keyframes showSlide {
+        0% {
+          transform: translateX(-30px);
+        }
+        15% {
+          transform: translateX(-250px);
+        }
+        100% {
+          transform: translateX(-222px);
+        }
+      }
+      @keyframes hideSlide {
+        0% {
+          transform: translateX(-222px);
+        }
+        15% {
+          transform: translateX(-250px);
+        }
+        100% {
+          transform: translateX(212px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root">
+      <div class="current-item">현재 아이템 :</div>
+      <div class="comboBox">
+        <input type="text" id="" name="" />
+        <span class="arrow"
+          ><img
+            src="https://img.icons8.com/ios-glyphs/30/000000/expand-arrow--v2.png"
+        /></span>
+        <ul class="comboBox-list"></ul>
+      </div>
+      <div class="notification">아이템이 추가 되었습니다</div>
+    </div>
+    <script>
+      const ITEM_ADDED_EVENTNAME = "itemAdded";
+      const items = [];
+      let currentItem = null;
+      const $currentItem = document.querySelector(".current-item");
+      const $inputTag = document.querySelector(".comboBox input");
+      const $arrowDown = document.querySelector(".comboBox .arrow");
+      const $notification = document.querySelector(".notification");
+      const $itemList = document.querySelector(".comboBox-list");
+
+      class ComboBox {
+        constructor(config) {
+          this.$root = document.querySelector(config.selector);
+          console.log(config.selector, this.$root);
+          this.$currentItem = this.$root.querySelector(".current-item");
+          this.$inputElm = this.$root.querySelector(".comboBox input");
+          this.$arrowDown = this.$root.querySelector(".comboBox .arrow");
+          this.$itemList = this.$root.querySelector(".comboBox-list");
+
+          this.eventBind();
+        }
+
+        eventBind() {
+          this.$inputElm.addEventListener("keyup", e => {
+            const { value } = e.target;
+            if (!value) return;
+
+            if (e.key === "Enter") {
+              console.log(value);
+            }
+          });
+
+          this.$arrowDown.addEventListener("click", e => {
+            this.toggleItemList();
+          });
+
+          document.addEventListener("click", e => {
+            console.log(e.target.nodeName);
+            if (e.target.nodeName === "HTML" || e.target.nodeName === "BODY")
+              this.toggleItemList();
+          });
+        }
+
+        toggleItemList() {
+          this.$itemList.classList.toggle("open");
+        }
+      }
+
+      const comboInc = new ComboBox({
+        selector: "#root",
+      });
+
+      // const toggleItemList = () => {
+      //   $itemList.classList.toggle("open");
+      // };
+
+      // $inputTag.addEventListener("keyup", e => {
+      //   const { value } = e.target;
+      //   if (!value) return;
+
+      //   if (e.key === "Enter") {
+      //     items.push(value);
+      //     e.target.value = "";
+      //     document.dispatchEvent(new CustomEvent(ITEM_ADDED_EVENTNAME));
+      //     $itemList.innerHTML = items.map(item => `<li>${item}</li>`).join("");
+      //   }
+      // });
+
+      // $arrowDown.addEventListener("click", e => {
+      //   toggleItemList();
+      // });
+
+      // $itemList.addEventListener("click", e => {
+      //   if (e.target.nodeName !== "LI") return;
+      //   const currentValue = e.target.textContent;
+      //   $inputTag.value = currentValue;
+      //   $currentItem.textContent = `현재 아이템 : ${currentValue}`;
+
+      //   toggleItemList();
+      // });
+
+      // document.addEventListener(ITEM_ADDED_EVENTNAME, e => {
+      //   $notification.classList.add("notification--show");
+      //   $notification.classList.remove("notification--hide");
+
+      //   window.setTimeout(() => {
+      //     $notification.classList.add("notification--hide");
+      //     $notification.classList.remove("notification--show");
+      //   }, 3000);
+      // });
+    </script>
+  </body>
+</html>

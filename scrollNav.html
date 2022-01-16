@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scroll Nav Spy</title>
+    <style>
+      :root {
+        --basic-size: 13em;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .nav {
+        position: fixed;
+        width: 100%;
+        height: 80px;
+        left: 0;
+        top: 0;
+        display: flex;
+        justify-content: space-evenly;
+        align-items: center;
+        gap: 1em;
+        background-color: #000;
+      }
+      .nav a {
+        padding: 10px 20px;
+        color: #fff;
+        font-size: 1em;
+        line-height: 1em;
+        text-decoration: none;
+        border-radius: 0.5em;
+        background-color: coral;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+      }
+      .container section {
+        height: 700px;
+      }
+      .container section:nth-child(1) {
+        background-color: cornflowerblue;
+      }
+      .container section:nth-child(2) {
+        background-color: crimson;
+      }
+      .container section:nth-child(3) {
+        background-color: darkkhaki;
+      }
+      .container section:nth-child(4) {
+        background-color: deepskyblue;
+      }
+      .container section:nth-child(5) {
+        background-color: lightgreen;
+      }
+      .mart-item {
+        font-size: 3.3333333333333333333vw;
+      }
+      .mart-item .heading {
+        font-size: calc(13em / 12);
+        height: calc(40em / 13);
+        background-color: #fff;
+      }
+      .something img {
+        width: 100px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="nav">
+      <a href="">html</a>
+      <a href="">css</a>
+      <a href="">javascript</a>
+      <a href="">react</a>
+      <a href="">vue</a>
+    </nav>
+
+    <main class="container">
+      <section></section>
+      <section id="product">
+        <div class="mart-item">
+          <div class="heading">
+            디자인 시스템 디자이너가 말하는 디자인 시스템이란
+            <span>무엇일까?</span>
+          </div>
+        </div>
+      </section>
+      <section></section>
+      <section></section>
+      <section></section>
+    </main>
+
+    <script>
+      const $container = document.querySelector(".container");
+      const $sectionItems = [...$container.children];
+      const sclt = $sectionItems.map(item => {
+        const [oft, clh] = [item.offsetTop, item.clientHeight];
+        return [oft - clh / 2, oft + clh / 2];
+      });
+      console.log(sclt);
+      window.addEventListener("scroll", e => {
+        const scrollTop =
+          window.scrollY ||
+          window.pageYOffset ||
+          document.documentElement.clientTop ||
+          document.body.clientTop;
+
+        const targetIndex = Math.max(
+          sclt.findIndex(([from, to]) => {
+            return from <= scrollTop && to > scrollTop;
+          }),
+          0
+        );
+        console.log(targetIndex);
+      });
+    </script>
+
+    <script>
+      const data = [
+        {
+          id: 1,
+          product_src:
+            "https://cdn.011st.com/11dims/resize/300x300/quality/85/11src/pd/22/6/7/4/8/8/1/CZaHg/2570674881_B.jpg",
+          link_url: "",
+          product: "디자인 시스템 디자이너가 말하는 디자인 시스템이란",
+          price: 3500,
+          sale: 33,
+          cost: 3000,
+          label: ["복지"],
+        },
+        {
+          id: 2,
+          product_src:
+            "https://cdn.011st.com/11dims/resize/370x370/quality/75/11src/pd/22/5/6/5/6/7/3/wSrxY/1894565673_L300.jpg",
+          product: "강변가요제가 배출한 스타들",
+          price: 4500,
+          sale: 11,
+          cost: 622,
+          label: ["복지", "무료배송"],
+        },
+        {
+          id: 3,
+          product_src:
+            "https://cdn.011st.com/11dims/resize/370x370/quality/75/11src/pd/21/3/7/5/5/3/2/jMNuY/3186375532_B.jpg",
+          product: "쌍용차 진짜 인수하시나요?",
+          price: 17500,
+          sale: 76,
+          cost: 9238,
+          label: ["복지", "무료배송"],
+        },
+      ];
+      class displayMartItem {
+        constructor(config) {
+          // 설정정보
+          this.rootSelector = document.querySelector(config.selector);
+          this.data = config.data;
+          this.lazyFnc = config.lazy;
+
+          // callback setup
+          this.callback = config.changeEvent;
+
+          this.render(this.rootSelector, data, this.lazyFnc);
+        }
+
+        render(selector, data, lazy) {
+          data.forEach((item, i) => {
+            selector.appendChild(this.martTemplate(item));
+            lazy();
+          });
+        }
+
+        martTemplate({ id, product_src, product, price, sale, cost, label }) {
+          const newItem = document.createElement("div");
+          newItem.classList.add("something");
+          newItem.innerHTML = `
+            <ul>
+              ${label.map(text => `<li>${text}</li>`).join("")}
+            </ul>
+            <a href="#">
+              <div>
+                <span><img data-lazying src="${product_src}" alt="" /></span>
+                <h3>${product}</h3>
+              </div>
+              <div class="price-container">
+                <del>${price}</del>
+                <span>${cost}</span>
+                <span>${sale}</span>
+              </div>
+            </a>
+          `;
+
+          return newItem;
+        }
+      }
+
+      const lazy = () => {
+        console.log("lazy");
+      };
+
+      const martItem1 = new displayMartItem({
+        selector: "#product",
+        data: data,
+        lazy: lazy,
+        changeEvent: function () {
+          console.log("test");
+        },
+      });
+    </script>
+  </body>
+</html>
